@@ -1,0 +1,30 @@
+﻿@model List<Learning4.Models.Coupons.CoouponBase>
+
+<div class="container">
+    <h2>List of Coupons</h2>
+    <div class=" row">
+        <table class="table-bordered table-responsive table table-dark bg-black text-white">
+            <thead>
+                <tr>
+                    <th>S.No</th>
+                    <th>CouponCode</th>
+                    <th>Discount</th>
+                    <th>MinAmountRequired</th>
+                    <th>ExpiryDate</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach(var item in Model)
+                {
+                    <tr>
+                        <td>@item.CouponId</td>
+                        <td>@item.CouponCode</td>
+                        <td>@item.DiscountAmount</td>
+                        <td>@item.MinimumPurchaseAmount</td>
+                        <td>@item.ExpiryDate.ToShortDateString()</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

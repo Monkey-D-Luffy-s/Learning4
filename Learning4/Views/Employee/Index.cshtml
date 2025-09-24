@@ -1,0 +1,126 @@
+﻿@model Learning4.Models.Employees.AddEmployeeModel
+
+<div class="container">
+    <h2>Add Employee</h2>
+    <form asp-action="Index" method="post" enctype="multipart/form-data">
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label asp-for="Name"></label>
+                    <input asp-for="Name" class="form-control me-sm-2" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label asp-for="RoleId"></label>
+                    <select asp-for="RoleId" asp-items="ViewBag.Roles" class="form-control me-sm-2">
+                        <option value="">-- Select Role --</option>
+                    </select>
+                    <span asp-validation-for="RoleId" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label asp-for="Salary"></label>
+                    <input asp-for="Salary" type="number" class="form-control me-sm-2" />
+                    <span asp-validation-for="Salary" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label asp-for="DateOfJoining"></label>
+                    <input asp-for="DateOfJoining" class="form-control me-sm-2" />
+                    <span asp-validation-for="DateOfJoining" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label asp-for="Email"></label>
+                    <input asp-for="Email" class="form-control me-sm-2" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label asp-for="PhoneNumber"></label>
+                    <input asp-for="PhoneNumber" class="form-control me-sm-2" />
+                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label asp-for="Address"></label>
+                    <input asp-for="Address" class="form-control me-sm-2" />
+                    <span asp-validation-for="Address" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label asp-for="CollegeId"></label>
+                    <select asp-for="CollegeId" asp-items="ViewBag.Colleges" class="form-control me-sm-2">
+                        <option value="">-- Select College --</option>
+                    </select>
+                    <span asp-validation-for="CollegeId" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label asp-for="DistrictID"></label>
+                    <select asp-for="DistrictID" asp-items="ViewBag.Districts" class="form-control me-sm-2">
+                        <option value="">-- Select District --</option>
+                    </select>
+                    <span asp-validation-for="DistrictID" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label asp-for="AdhaarNumber"></label>
+                    <input asp-for="AdhaarNumber" type="number" class="form-control me-sm-2" />
+                    <span asp-validation-for="AdhaarNumber" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label asp-for="PANNumber"></label>
+                    <input asp-for="PANNumber" type="text" class="form-control me-sm-2" />
+                    <span asp-validation-for="PANNumber" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label asp-for="Passport_Document"></label>
+                    <input asp-for="Passport_Document" type="file" class="form-control me-sm-2" />
+                    <span asp-validation-for="Passport_Document" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label asp-for="BloodGroup"></label>
+                    <select asp-for="BloodGroup" class="form-control me-sm-2">
+                        <option value="">-- Select Blood Group --</option>
+                        <option value="A+">A+</option>
+                        <option value="A-">A-</option>
+                        <option value="B+">B+</option>
+                        <option value="B-">B-</option>
+                        <option value="AB+">AB+</option>
+                        <option value="AB-">AB-</option>
+                        <option value="O+">O+</option>
+                        <option value="O-">O-</option>
+                    </select>
+                    <span asp-validation-for="BloodGroup" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label asp-for="Singnature_Document"></label>
+                    <input asp-for="Singnature_Document" type="file" class="form-control me-sm-2" />
+                    <span asp-validation-for="Singnature_Document" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Add</button>
+    </form>
+    
+</div>

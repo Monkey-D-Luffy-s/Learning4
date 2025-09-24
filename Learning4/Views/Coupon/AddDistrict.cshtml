@@ -1,0 +1,76 @@
+﻿@model Learning4.Models.Coupons.Districts
+
+<style>
+    .dataTables_wrapper .dataTables_filter {
+        float: left !important; /* Search on left */
+        text-align: left !important;
+    }
+
+    .dataTables_wrapper .dataTables_paginate {
+        float: right !important; /* Pagination on right */
+    }
+
+    .dataTables_wrapper .dt-length{
+        text-align:end;
+    }
+
+    .dt-paging .dt-paging-button{
+        padding:10px
+        margin:2px;
+    }
+</style>
+
+<div class="container">
+    <h2>Add Districts</h2>
+    <form asp-action="AddDistrict" method="post">
+        <div class="row">
+
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label asp-for="DistrictName"></label>
+                    <input asp-for="DistrictName" type="text" class="form-control" />
+                    <span asp-validation-for="DistrictName" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <button type="submit" class="btn btn-primary mt-3">Add District</button>
+
+            </div>
+        </div>
+    </form>
+    <hr />
+
+    <h3>District List</h3>
+    <table id="districtTable" class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>District ID</th>
+                <th>District Name</th>
+            </tr>
+        </thead>
+    </table>
+    @section Scripts {
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" />
+        <script>
+            $(document).ready(function () {
+                $('#districtTable').DataTable({
+                    ajax: {
+                        url: '@Url.Action("GetDistricts", "Coupon")',
+                        dataSrc: ''
+                    },
+                    columns: [
+                        { data: 'districtID' },
+                        { data: 'districtName' }
+                    ], dom:
+                        "<'row'<'col-sm-6'f><'col-sm-6'l>>" +   // Search (f) left, Length (l) right
+                        "<'row'<'col-sm-12'tr>>" +             // Table
+                        "<'row'<'col-sm-5'i><'col-sm-7'p>>",   // Info (i) left, Pagination (p) right
+                    language: {
+                        search: "_INPUT_",
+                        searchPlaceholder: "Search districts..."
+                    }
+                });
+            });
+        </script>
+    }
+</div>
