@@ -138,6 +138,21 @@ namespace Learning4.Services.Leaves
                 throw;
             }
         }
+        public async Task<List<LeavesMaster>> GetAllEmployeesLeavesforPrincipal(string empId)
+        {
+            try
+            {
+                return await _context.LeavesMasters
+                    .Include(l => l.LeaveTypeMaster)
+                    .Include(l => l.StatusMaster)
+                    .Where(l => l.EmployeeId != empId)
+                    .ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
         public async Task<LeavesMaster?> GetLeaveDetails(string leaveId)
         {
             try

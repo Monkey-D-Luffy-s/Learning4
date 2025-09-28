@@ -1,0 +1,72 @@
+﻿@model List<Learning4.Models.Leaves.LeavesMaster>
+
+@{
+    ViewData["Title"] = "PrincipalViewLeaves";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+ <div class="container">
+     <div class="row">
+         <h3>Approval of the Leave Reuests</h3>
+     </div>
+     <div class="row">
+        <form asp-action="GetAllLeavesByEmployeeID" method="post">
+            <div class="form-group">
+                <label for="EmployeeId"></label>
+                <select id="EmployeeId" asp-items="ViewBag.Employees" class="form-control me-sm-2">
+                    <option value="">-- Select Role --</option>
+                </select>
+            </div>
+            <div class="col-sm-4">
+                <button type="submit" class="btn btn-primary mt-3">Add College</button>
+            </div>
+         </form>
+     </div>
+    
+     <div class="row">
+         <table class="table">
+             <thead>
+                 <tr>
+                     <th>Employee Name</th>
+                     <th>Leave Type</th>
+                     <th>Start Date</th>
+                     <th>End Date</th>
+                     <th>Reason</th>
+                     <th>Duration</th>
+                     <th>Status</th>
+                     <th>Actions</th>
+                 </tr>
+             </thead>
+             <tbody>
+                 @foreach (var leave in Model)
+                 {
+                     <tr>
+                        <td>@leave.EmployeeId</td>
+                        <td>@leave.LeaveTypeMaster.LeaveType</td>
+                         <td>@leave.LeaveFrom.ToShortDateString()</td>
+                         <td>@leave.LeaveTo.ToShortDateString()</td>
+                         <td>@leave.Reason</td>
+                         <td>@leave.LeaveDays</td>
+                         <td>@leave.StatusMaster.Status</td>
+                         <td>
+                            @if (leave.StatusMaster.Status == "Pending")
+                             {
+                                <form asp-action="ApproveLeave" method="post" style="display:inline;">
+                                     <input type="hidden" name="id" value="@leave.LeaveId" />
+                                     <button type="submit" class="btn btn-success btn-sm">Approve</button>
+                                 </form>
+                                <form asp-action="RejectLeave" method="post" style="display:inline;">
+                                    <input type="hidden" name="id" value="@leave.LeaveId" />
+                                     <button type="submit" class="btn btn-danger btn-sm">Reject</button>
+                                 </form>
+                             }
+                             else
+                             {
+                                @leave.StatusMaster.Status
+                             }
+                         </td>
+                     </tr>
+                 }
+             </tbody>
+        </table>
+ </div>

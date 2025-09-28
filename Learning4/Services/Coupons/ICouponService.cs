@@ -21,5 +21,7 @@ namespace Learning4.Services.Coupons
         IEnumerable<SelectListItem> GetDistrictsList();
         IEnumerable<SelectListItem> GetCollegesList();
         Task<List<Employee>> GetEmployeesDetails();
+
+        IEnumerable<SelectListItem> GetEmployeeList();
     }
 }

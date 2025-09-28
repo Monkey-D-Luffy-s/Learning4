@@ -15,5 +15,9 @@ namespace Learning4.Services.Leaves
         Task<LeavesMaster?> GetLeaveDetails(string leaveId);
         Task<List<StatusMaster>> GetAllStatusTypes();
         Task<List<LeaveTypeMaster>> GetAllLeaveTypes();
+        Task<string> UpdateLeave(LeavesMaster leave);
+        Task<string> CancelLeave(LeavesMaster leave);
+        Task<string> ApproveorRejectLeave(LeavesMaster leave, int id);
+        Task<List<LeavesMaster>> GetAllEmployeesLeavesforPrincipal(string empId);
     }
 }

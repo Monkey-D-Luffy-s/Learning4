@@ -179,7 +179,10 @@
                     { "data": "dateOfJoining", "render": function (data) { return new Date(data).toLocaleDateString(); } },
                     { "data": null, "render": function (data, type, row) {
                         return '<a href="/Employee/Edit/' + row.id + '" class="btn btn-sm btn-primary">Edit</a> ' +
-                               '<a href="/Employee/Delete/' + row.id + '" class="btn btn-sm btn-danger">Delete</a>';
+                               ` <form asp-action="CancelLeave" method="post" style="display:inline;">
+                                    <input type="hidden" name="id" value="${leave.LeaveId}" />
+                                     <button type="submit" class="btn btn-danger btn-sm">Cancel</button>
+                                 </form>`;
                     }}
                 ],
                 language: {

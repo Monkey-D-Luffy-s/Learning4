@@ -54,7 +54,7 @@
                                 </li>
                             </ul>
                         </li>
-                        @if (@User.IsInRole("Junior Lecturer") || @User.IsInRole("Principal"))
+                        @if (@User.IsInRole("Junior Lecturer"))
                         {
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
@@ -76,6 +76,29 @@
                                 </ul>
                             </li>
                             
+                        }
+                        @if (@User.IsInRole("Principal")){
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                                   data-bs-toggle="dropdown" aria-expanded="false">
+                                    Leaves
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <li>
+                                        <a class="dropdown-item" asp-controller="mLeaves" asp-action="Index">Apply Leaves</a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" asp-controller="mLeaves" asp-action="PrincipalViewLeaves">Leave Requests</a>
+                                    </li>
+                                    <li>
+                                        <hr class="dropdown-divider">
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" asp-controller="mLeaves" asp-action="Index">Leaves History</a>
+                                    </li>
+
+                                </ul>
+                            </li>
                         }
    
                         @if (@User.IsInRole("Admin"))

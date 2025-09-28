@@ -1,6 +1,8 @@
 ﻿using Learning4.Models.Coupons;
 using Learning4.Models.Leaves;
+using Learning4.Services.Coupons;
 using Learning4.Services.Leaves;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Learning4.Controllers
@@ -8,9 +10,11 @@ namespace Learning4.Controllers
     public class mLeavesController : Controller
     {
         private readonly ILeaveService _leavesService;
-        public mLeavesController(ILeaveService leavesService)
+        private readonly ICouponService _couponService;
+        public mLeavesController(ILeaveService leavesService, ICouponService couponService)
         {
             _leavesService = leavesService;
+            _couponService = couponService;
         }
 
         public IActionResult Index()
@@ -129,6 +133,93 @@ namespace Learning4.Controllers
         {
             var districts = await _leavesService.GetAllLeaveTypes();
             return Json(districts);
+        }
+        [Authorize(Roles = "Principal")]
+        public async Task<IActionResult> PrincipalViewLeaves()
+        {
+            ViewBag.Employees = _couponService.GetEmployeeList();
+            List<LeavesMaster> leaves = await _leavesService.GetAllEmployeesLeavesforPrincipal(User.Identity?.Name);
+            return View(leaves);
+        }
+        [HttpPost]
+        public async Task<JsonResult> GetAllLeavesByEmployeeID(string empId)
+        {
+            var districts = await _leavesService.GetAllEmployeeLeaves(empId);
+            return Json(districts);
+        }
+        [Authorize(Roles = "Principal")]
+        [HttpPost]
+        public async Task<IActionResult> ApproveLeave(string id)
+        {
+            var leaveDetails = await _leavesService.GetLeaveDetails(id);
+            if (leaveDetails != null)
+            {
+                var result = await _leavesService.ApproveorRejectLeave(leaveDetails, 4);
+                if (result.Contains("successfully"))
+                {
+                    TempData["SuccessMessage"] = result;
+                    return RedirectToAction("PrincipalViewLeaves");
+                }
+                else
+                {
+                    TempData["ErrorMessage"] = result;
+                    return RedirectToAction("PrincipalViewLeaves");
+                }
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "Leave not found.";
+                return RedirectToAction("PrincipalViewLeaves");
+            }
+        }
+        [Authorize(Roles = "Principal")]
+        [HttpPost]
+        public async Task<IActionResult> RejectLeave(string id)
+        {
+            var leaveDetails = await _leavesService.GetLeaveDetails(id);
+            if (leaveDetails != null)
+            {
+                var result = await _leavesService.ApproveorRejectLeave(leaveDetails, 3);
+                if (result.Contains("successfully"))
+                {
+                    TempData["SuccessMessage"] = result;
+                    return RedirectToAction("PrincipalViewLeaves");
+                }
+                else
+                {
+                    TempData["ErrorMessage"] = result;
+                    return RedirectToAction("PrincipalViewLeaves");
+                }
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "Leave not found.";
+                return RedirectToAction("PrincipalViewLeaves");
+            }
+        }
+        [HttpPost]
+        public async Task <IActionResult> CancelLeave(string id)
+        {
+            var leaveDetails = await _leavesService.GetLeaveDetails(id);
+            if (leaveDetails != null)
+            {
+                var result = await _leavesService.CancelLeave(leaveDetails);
+                if (result.Contains("successfully"))
+                {
+                    TempData["SuccessMessage"] = result;
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    TempData["ErrorMessage"] = result;
+                    return RedirectToAction("Index");
+                }
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "Leave not found.";
+                return RedirectToAction("Index");
+            }
         }
     }
 }

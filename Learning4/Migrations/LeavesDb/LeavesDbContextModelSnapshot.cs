@@ -45,7 +45,6 @@ namespace Learning4.Migrations.LeavesDb
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("EmployeeId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("LeaveDays")
@@ -65,7 +64,6 @@ namespace Learning4.Migrations.LeavesDb
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Remarks")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("StatusId")
