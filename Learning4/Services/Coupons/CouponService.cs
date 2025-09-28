@@ -197,6 +197,5 @@ namespace Learning4.Services.Coupons
                 .ToList();
         }
 
-        
     }
 }

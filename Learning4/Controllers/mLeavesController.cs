@@ -142,9 +142,9 @@ namespace Learning4.Controllers
             return View(leaves);
         }
         [HttpPost]
-        public async Task<JsonResult> GetAllLeavesByEmployeeID(string empId)
+        public async Task<JsonResult> GetAllLeavesByEmployeeID(string EmployeeId)
         {
-            var districts = await _leavesService.GetAllEmployeeLeaves(empId);
+            var districts = await _leavesService.GetAllEmployeeLeaves(EmployeeId);
             return Json(districts);
         }
         [Authorize(Roles = "Principal")]

@@ -126,12 +126,23 @@ namespace Learning4.Services.Leaves
         public async Task<List<LeavesMaster>> GetAllEmployeeLeaves(string empId)
         {
             try
-            {
-                return await _context.LeavesMasters
-                    .Include(l => l.LeaveTypeMaster)
-                    .Include(l => l.StatusMaster)
-                    .Where(l => l.EmployeeId == empId)
-                    .ToListAsync();
+            {   if(empId == null) 
+                {
+                    return await _context.LeavesMasters
+                   .Include(l => l.LeaveTypeMaster)
+                   .Include(l => l.StatusMaster)
+                   .Where(l => l.EmployeeId != empId)
+                   .ToListAsync();
+                }
+                else
+                {
+                    return await _context.LeavesMasters
+                       .Include(l => l.LeaveTypeMaster)
+                       .Include(l => l.StatusMaster)
+                       .Where(l => l.EmployeeId == empId)
+                       .ToListAsync();
+                }
+                   
             }
             catch (Exception ex)
             {

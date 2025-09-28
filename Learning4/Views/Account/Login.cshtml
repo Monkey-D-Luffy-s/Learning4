@@ -1,18 +1,23 @@
 ﻿@model Learning4.Models.Account.LoginUser
 
 <div class="container">
-    <h2>Login</h2>
+    <h2 class="text-center">Login</h2>
     <form asp-action="Login" method="post">
-        <div class="form-group">
-            <label asp-for="Username"></label>
-            <input asp-for="Username" class="form-control" />
-            <span asp-validation-for="Username" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label asp-for="Password"></label>
-            <input asp-for="Password" class="form-control" />
-            <span asp-validation-for="Password" class="text-danger"></span>
-        </div>
-        <button class="btn btn-primary" type="submit">Login</button>
+       <div class="row d-flex justify-content-center m-auto">
+            <div class="col-10 col-md-4">
+                <div class="form-group my-2">
+                    <label asp-for="Username"></label>
+                    <input asp-for="Username" class="form-control bg-gray" />
+                    <span asp-validation-for="Username" class="text-danger"></span>
+                </div>
+                <div class="form-group my-2">
+                    <label asp-for="Password"></label>
+                    <input asp-for="Password" class="form-control bg-gray" />
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+                <button class="btn btn-primary w-30 my-4" type="submit">Login</button>
+            </div>
+            
+       </div>
     </form>
 </div>
