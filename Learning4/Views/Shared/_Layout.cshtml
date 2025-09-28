@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Http
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -11,7 +12,12 @@
     <link href="~/lib/select2/css/select2.min.css" rel="stylesheet" />
     
 </head>
+@{
+        var userName = Context.Session.GetString("UserName");
+        var Role = Context.Session.GetString("Role");
+}
 <body>
+
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-black border-bottom box-shadow mb-3">
             <div class="container-fluid">
@@ -20,7 +26,7 @@
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-lg-inline-flex justify-content-between">
+                <div class="navbar-collapse collapse d-lg-inline-flex justify-content-between px-5 mx-5">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
@@ -48,6 +54,30 @@
                                 </li>
                             </ul>
                         </li>
+                        @if (@User.IsInRole("Junior Lecturer") || @User.IsInRole("Principal"))
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                                   data-bs-toggle="dropdown" aria-expanded="false">
+                                    Leaves
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <li>
+                                        <a class="dropdown-item" asp-controller="mLeaves" asp-action="Index">Leaves</a>
+                                    </li>
+                                    
+                                    <li>
+                                        <hr class="dropdown-divider">
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" asp-controller="mLeaves" asp-action="Index">Leaves History</a>
+                                    </li>
+                                   
+                                </ul>
+                            </li>
+                            
+                        }
+   
                         @if (@User.IsInRole("Admin"))
                         {
 
@@ -96,45 +126,34 @@
                                         <hr class="dropdown-divider">
                                     </li>
                                     <li>
-                                        <a class="dropdown-item" asp-controller="Products" asp-action="Index">All Products</a>
+                                        <a class="dropdown-item" asp-controller="mLeaves" asp-action="AddLeaveType">ADD LeaveType</a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" asp-controller="mLeaves" asp-action="AddStatusType">ADD Status</a>
                                     </li>
                                 </ul>
                             </li>
                         }
                    
                     </ul>
-                    <ul class="navbar-nav flex mx-4">
+                    <ul class="navbar-nav flex">
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                                data-bs-toggle="dropdown" aria-expanded="false">
                                 Profile
                             </a>
-                            @* <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li>
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Index">Register</a>
-                                </li>
-                                
-                                <li>
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Login">Login</a>
-                                </li>
-                                <li>
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Logout">Logout</a>
-                                </li>
-                                <li>
-                                    <hr class="dropdown-divider">
-                                </li>
-                                <li>
-                                    <a class="dropdown-item" asp-controller="Products" asp-action="Index">All Products</a>
-                                </li>
-
-                            </ul> *@
+                           
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                @if (User.Identity.IsAuthenticated)
+                                @if(User.Identity.IsAuthenticated)
                                 {
                                     <li class="nav-item">
                                         <a class="nav-link" asp-controller="Account" asp-action="Profile">
                                             Hello, @User.Identity.Name
                                         </a>
+                                        @foreach (var roleClaim in User.Claims.Where(c => c.Type == System.Security.Claims.ClaimTypes.Role))
+                                        {
+                                            <p class="px-2">@roleClaim.Value</p>
+                                        }
                                     </li>
                                     <li class="nav-item">
                                         <form asp-controller="Account" asp-action="Logout" method="post" class="d-inline">
@@ -174,7 +193,6 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/lib/toastr.js/toastr.min.js"></script>
-    <script src="~/lib/select2/js/select2.js"></script>
     <script src="~/lib/select2/js/select2.min.js"></script>
     <script src="~/lib/datatables.net/datatables.min.js"></script>
     <script>

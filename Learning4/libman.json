@@ -7,10 +7,6 @@
       "destination": "wwwroot/lib/toastr.js/"
     },
     {
-      "library": "select2@4.0.13",
-      "destination": "wwwroot/lib/select2/"
-    },
-    {
       "library": "datatables@1.10.21",
       "destination": "wwwroot/lib/datatables/"
     },
@@ -20,6 +16,10 @@
       "files": [
         "dataTables.min.js"
       ]
+    },
+    {
+      "library": "select2@4.0.13",
+      "destination": "wwwroot/lib/select2/"
     }
   ]
 }

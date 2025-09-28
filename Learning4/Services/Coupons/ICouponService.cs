@@ -1,4 +1,5 @@
 ﻿using Learning4.Models.Coupons;
+using Learning4.Models.Employees;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Learning4.Services.Coupons
@@ -19,5 +20,6 @@ namespace Learning4.Services.Coupons
 
         IEnumerable<SelectListItem> GetDistrictsList();
         IEnumerable<SelectListItem> GetCollegesList();
+        Task<List<Employee>> GetEmployeesDetails();
     }
 }

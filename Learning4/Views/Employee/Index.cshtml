@@ -1,5 +1,19 @@
 ﻿@model Learning4.Models.Employees.AddEmployeeModel
 
+
+<style>
+    .dt-layout-row .dt-layout-start {
+        display:flex;
+        margin:10px;
+        justify-content:space-between;
+    }
+
+    .dt-layout-start .dt-layout-end {
+        width: 50%;
+    }
+
+
+</style>
 <div class="container">
     <h2>Add Employee</h2>
     <form asp-action="Index" method="post" enctype="multipart/form-data">
@@ -122,5 +136,58 @@
 
         <button type="submit" class="btn btn-primary">Add</button>
     </form>
-    
+    <table class="table table-responsive" id="tblEmployeeDetails">
+        <thead>
+            <tr>
+                <td>S.No</td>
+                <th>Employee Name</th>
+                <th>Employee ID</th>
+                <th>Email</th>
+                <th>Joining Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            
+        </tbody>
+    </table>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" />
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script>
+
+        var jq1 = jQuery.noConflict();
+        jq1(document).ready(function () {
+            jq1('input[name="DateOfJoining"]').attr('type', 'date');
+            // jq1('#BloodGroup,#CollegeId,#RoleId,#DistrictID').select2({
+            //     width:'100%'
+            // });
+             
+             $('#tblEmployeeDetails').DataTable({
+                ajax: {
+                    url: '@Url.Action("GetEmployees", "Coupon")',
+                    dataSrc: function (json) {
+                        console.log("Response from GetEmployees:", json); // 🔍 log full response
+                        return json; // must return the data array
+                    }
+                },
+                columns: [
+                    { "data": null, "render": function (data, type, row, meta) { return meta.row + 1; } },
+                    { "data": "name" },
+                    { "data": "employeeId" },
+                    { "data": "email" },
+                    { "data": "dateOfJoining", "render": function (data) { return new Date(data).toLocaleDateString(); } },
+                    { "data": null, "render": function (data, type, row) {
+                        return '<a href="/Employee/Edit/' + row.id + '" class="btn btn-sm btn-primary">Edit</a> ' +
+                               '<a href="/Employee/Delete/' + row.id + '" class="btn btn-sm btn-danger">Delete</a>';
+                    }}
+                ],
+                language: {
+                        search: "_INPUT_",
+                        searchPlaceholder: "Search Colleges..."
+                    }
+            });
+        });
+
+</script>
 </div>

@@ -130,6 +130,10 @@ namespace Learning4.Controllers
             return Json(districts);
         }
 
-     
+        public JsonResult GetEmployees()
+        {
+            var employees = _couponService.GetEmployeesDetails().Result;
+            return Json(employees);
+        }
     }
 }

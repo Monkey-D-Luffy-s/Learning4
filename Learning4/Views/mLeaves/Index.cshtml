@@ -1,0 +1,131 @@
+﻿@model Learning4.Models.Leaves.LeavesMaster
+
+@{
+    ViewData["Title"] = "Leaves";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<style>
+    .dt-layout-row .dt-layout-start {
+        display: flex;
+        margin: 10px;
+        justify-content: space-between;
+    }
+
+    .dt-layout-start .dt-layout-end {
+        width: 50%;
+    }
+
+</style>
+<div class="container">
+    <h2>Add Employee</h2>
+    <form asp-action="Index" method="post" enctype="multipart/form-data">
+        <div class="row">
+           
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label asp-for="LeaveTypeId"></label>
+                    <select asp-for="LeaveTypeId" asp-items="ViewBag.LeaveTypes" class="form-control me-sm-2">
+                        <option value="">-- Select LeaveType --</option>
+                    </select>
+                    <span asp-validation-for="LeaveTypeId" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label asp-for="LeaveFrom"></label>
+                    <input asp-for="LeaveFrom" type="date" onchange="return CalculateDuration();" class="form-control me-sm-2" />
+                    <span asp-validation-for="LeaveFrom" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label asp-for="LeaveTo"></label>
+                    <input asp-for="LeaveTo" type="date" onchange="return CalculateDuration();" class="form-control me-sm-2" />
+                    <span asp-validation-for="LeaveTo" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label asp-for="LeaveDays"></label>
+                    <input asp-for="LeaveDays" id="LeaveDays" class="form-control me-sm-2" readonly />
+                    <span asp-validation-for="LeaveDays" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label asp-for="Reason"></label>
+                    <input asp-for="Reason" class="form-control me-sm-2" />
+                    <span asp-validation-for="Reason" class="text-danger"></span>
+                </div>
+            </div>
+            
+        </div>
+
+        <button type="submit" class="btn btn-primary">Add</button>
+    </form>
+    <table class="table table-responsive" id="tblEmployeeLeaveDetails">
+        <thead>
+            <tr>
+                <td>S.No</td>
+                <th>LeaveType</th>
+                <th>Leave From</th>
+                <th>Leave To</th>
+                <th>Reason</th>
+                <th>Remarks</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" /> 
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script>
+
+        var jq1 = jQuery.noConflict();
+        jq1(document).ready(function () {
+             $('#tblEmployeeLeaveDetails').DataTable({
+                ajax: {
+                    url: '@Url.Action("GetAllLeave", "mLeaves")',
+                    dataSrc: function (json) {
+                        console.log("Response from GetEmployeesLeaves:", json); // 🔍 log full response
+                        return json; // must return the data array
+                    }
+                },
+                columns: [
+                    { "data": null, "render": function (data, type, row, meta) { return meta.row + 1; } },
+                    { "data": "leaveTypeMaster.leaveType" },
+                    { "data": "leaveFrom" },
+                    { "data": "leaveTo" },
+                    { "data": "reason" },
+                    { "data": "remarks" },
+                    { "data": "statusMaster.status" },
+                    { "data": null, "render": function (data, type, row) {
+                        return '<a href="/Employee/Edit/' + row.id + '" class="btn btn-sm btn-primary">Edit</a> ' +
+                               '<a href="/Employee/Delete/' + row.id + '" class="btn btn-sm btn-danger">Delete</a>';
+                    }}
+                ],
+                language: {
+                        search: "_INPUT_",
+                        searchPlaceholder: "Search Colleges..."
+                    }
+            });
+        });
+
+        function CalculateDuration() {
+            var startDate = new Date(document.getElementById("LeaveFrom").value);
+            var endDate = new Date(document.getElementById("LeaveTo").value);
+            var timeDiff = endDate - startDate;
+            var daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24)) + 1;
+            if (!isNaN(daysDiff) && daysDiff > 0) {
+                document.getElementById("LeaveDays").value = daysDiff;
+            } else {
+                document.getElementById("LeaveDays").value = '';
+            }
+        }
+    </script>
+</div>

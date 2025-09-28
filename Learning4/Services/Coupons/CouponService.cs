@@ -1,5 +1,7 @@
 ﻿using Learning4.data;
 using Learning4.Models.Coupons;
+using Learning4.Models.Employees;
+using Learning4.Services.Account;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,9 +10,11 @@ namespace Learning4.Services.Coupons
     public class CouponService : ICouponService
     {
         private readonly IDbContextFactory<CouponDbContext> _couponFactory;
-        public CouponService(IDbContextFactory<CouponDbContext> couponFactory)
+        private readonly IAccountService _acountService;
+        public CouponService(IDbContextFactory<CouponDbContext> couponFactory, IAccountService acountService)
         {
             _couponFactory = couponFactory;
+            _acountService = acountService;
         }
 
         public async Task<string> AddEmployeeAsync(Models.Employees.AddEmployeeModel emp)
@@ -22,6 +26,32 @@ namespace Learning4.Services.Coupons
                     .FirstOrDefault();
             string nextId = (lastEmployee == null ? 11000 : Convert.ToInt32(lastEmployee.EmployeeId) + 1).ToString();
             emp.EmployeeId = nextId;
+            var phoneExists = db.Employees.Any(e => e.PhoneNumber == emp.PhoneNumber);
+            if (phoneExists)
+            {
+                return "Phone number already exists.";
+            }
+            var emailExists = db.Employees.Any(e => e.Email == emp.Email);
+            if (emailExists)
+            {
+                return "Email already exists.";
+            }
+            if(emp.AdhaarNumber != null)
+            {
+                var adhaarExists = db.Employees.Any(e => e.AdhaarNumber == emp.AdhaarNumber);
+                if (adhaarExists)
+                {
+                    return "Adhaar number already exists.";
+                }
+            }
+            if(emp.PANNumber != null)
+            {
+                var panExists = db.Employees.Any(e => e.PANNumber == emp.PANNumber);
+                if (panExists)
+                {
+                    return "PAN number already exists.";
+                }
+            }
             Models.Employees.Employee employee = new Models.Employees.Employee
             {
                 EmployeeId = emp.EmployeeId,
@@ -46,6 +76,8 @@ namespace Learning4.Services.Coupons
             {
                 db.Employees.Add(employee);
                 await db.SaveChangesAsync();
+                await _acountService.AddUser(employee.EmployeeId, employee.Email, employee.EmployeeId+"Hrms@123" );
+                await _acountService.AssignRole(employee.EmployeeId, employee.RoleId);
                 return "Employee added successfully";
             }
             catch (Exception ex)
@@ -78,12 +110,16 @@ namespace Learning4.Services.Coupons
             }
         }
 
+        public async Task<List<Employee>> GetEmployeesDetails()
+        {
+            using var db = _couponFactory.CreateDbContext();
+            return await db.Employees.ToListAsync();
+        }
         public async Task<List<CoouponBase>> GetAllCoupons()
         {
             using var db = _couponFactory.CreateDbContext();
             return await db.Coupons.ToListAsync();
         }
-
 
         public async Task<string> AddDistrict(Districts dist)
         {
@@ -148,5 +184,19 @@ namespace Learning4.Services.Coupons
                 })
                 .ToList();
         }
+
+        public IEnumerable<SelectListItem> GetEmployeeList()
+        {
+            using var db = _couponFactory.CreateDbContext();
+            return db.Employees
+                .Select(d => new SelectListItem
+                {
+                    Value = d.EmployeeId,
+                    Text = d.EmployeeId + " - " + d.Name
+                })
+                .ToList();
+        }
+
+        
     }
 }

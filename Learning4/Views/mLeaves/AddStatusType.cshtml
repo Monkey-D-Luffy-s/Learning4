@@ -1,0 +1,84 @@
+﻿@model Learning4.Models.Leaves.StatusMaster
+@{
+    ViewData["Title"] = "Add Status Type";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .dataTables_wrapper .dataTables_filter {
+        float: left !important; /* Search on left */
+        text-align: left !important;
+    }
+
+    .dataTables_wrapper .dataTables_paginate {
+        float: right !important; /* Pagination on right */
+    }
+
+    .dataTables_wrapper .dt-length {
+        text-align: end;
+    }
+
+    .dt-paging .dt-paging-button {
+        padding: 10px;
+        margin:2px;
+    }
+</style>
+
+<div class="container">
+    <h2>Add Status Type</h2>
+    <form asp-action="AddStatusType" method="post">
+        <div class="form-group">
+            <label asp-for="Status"></label>
+            <input asp-for="Status" class="form-control" />
+            <span asp-validation-for="Status" class="text-danger"></span>
+        </div>
+        <button type="submit" class="btn btn-primary">Add Status</button>
+    </form>
+    <hr />
+
+    <h3>Status List</h3>
+    <table id="tblStatus" class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Status ID</th>
+                <th>Status Name</th>
+            </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+    </table>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" />
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script>
+
+        var jq1 = jQuery.noConflict();
+        jq1(document).ready(function () {
+            //jq1('input[name="DateOfJoining"]').attr('type', 'date');
+            // jq1('#BloodGroup,#CollegeId,#RoleId,#DistrictID').select2({
+            //     width:'100%'
+            // });
+
+            $('#tblStatus').DataTable({
+                ajax: {
+                    url: '@Url.Action("GetAllStatusTypes", "mLeaves")',
+                    dataSrc: function (json) {
+                        console.log("Response from GetAllStatusTypes:", json); // 🔍 log full response
+                        return json; // must return the data array
+                    }
+                },
+                columns: [
+                    { "data": "statusId" },
+                    { "data": "status" },
+                   
+                ],
+                language: {
+                        search: "_INPUT_",
+                        searchPlaceholder: "Search Colleges..."
+                }
+            });
+        });
+
+    </script>
+</div>

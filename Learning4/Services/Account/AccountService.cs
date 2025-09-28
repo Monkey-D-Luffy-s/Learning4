@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace Learning4.Services.Account
 {
@@ -11,11 +12,13 @@ namespace Learning4.Services.Account
         private readonly UserManager<IdentityUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly SignInManager<IdentityUser> _signInManager;
-        public  AccountService(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager, SignInManager<IdentityUser> signInManager)
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        public  AccountService(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager, SignInManager<IdentityUser> signInManager, IHttpContextAccessor httpContextAccessor)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _signInManager = signInManager;
+            _httpContextAccessor = httpContextAccessor;
         }
         public async Task<string> AddUser(string username, string email, string password)
         {
@@ -64,6 +67,11 @@ namespace Learning4.Services.Account
                 if(result.Succeeded)
                 {
                     var Profile = await _userManager.FindByNameAsync(username);
+
+                    var roles = await _userManager.GetRolesAsync(Profile);
+                    string roleList = string.Join("& ", roles);
+                    _httpContextAccessor.HttpContext.Session.SetString("UserName", Profile.UserName);
+                    _httpContextAccessor.HttpContext.Session.SetString("Role",roleList);
                     return new LoginResponse { Message = "Login successful.", Data = Profile, IsSuccess = true };
                 }
                 else
@@ -96,11 +104,6 @@ namespace Learning4.Services.Account
             var user = await _userManager.FindByNameAsync(userName);
             if (user == null) return "User not found.";
 
-            if (!await _roleManager.RoleExistsAsync(roleName))
-            {
-                return "Role '"+roleName+"' does not exist.";
-            }
-
             var result = await _userManager.AddToRoleAsync(user, roleName);
             if (result.Succeeded)
             {
@@ -122,6 +125,7 @@ namespace Learning4.Services.Account
 
         public async Task Logout()
         {
+            _httpContextAccessor.HttpContext.Session.Clear();
             await _signInManager.SignOutAsync();
         }
 
@@ -131,10 +135,12 @@ namespace Learning4.Services.Account
             return _roleManager.Roles
                 .Select(d => new SelectListItem
                 {
-                    Value = d.Id.ToString(),
+                    Value = d.Name,
                     Text = d.Name
                 })
                 .ToList();
         }
+
+
     }
 }

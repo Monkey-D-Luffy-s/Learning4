@@ -62,12 +62,14 @@ namespace Learning4.Controllers
                         var result = await _couponService.AddEmployeeAsync(emp);
                         if (result.ToString() == "Employee added successfully")
                         {
+                            //HttpContext.Session.GetString("UserName");
+                            //HttpContext.Session.GetString("Role");
                             TempData["SuccessMessage"] = result.ToString();
                             return RedirectToAction("Index");
                         }
                         else
                         {
-                            TempData["ErrorMessage"] = "Error while adding employee.";
+                            TempData["ErrorMessage"] = result.ToString();
                             return RedirectToAction("Index");
                         }
                             
@@ -92,5 +94,8 @@ namespace Learning4.Controllers
             }
             return View();
         }
+
+
+
     }
 }
